@@ -1,6 +1,6 @@
-#define DO_PIN 22  
+#define DO_PIN 13  
 
-const int ledPin =  5;    
+const int ledPin =  6;    
 
 void setup() {
   Serial.begin(9600);
@@ -15,4 +15,5 @@ void loop() {
     digitalWrite(ledPin, HIGH); }
   else {
     digitalWrite(ledPin, LOW);}
+
 }
