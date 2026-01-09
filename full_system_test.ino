@@ -50,14 +50,22 @@ void buzzer_pulsate(int buzzerPin, unsigned long pulseInterval, bool enable)
 {
   static unsigned long past_time = 0;
   static bool buzzerState = false;
+  static unsigned long lastInterval = 0;
 
   unsigned long current_time = millis();
 
   if (!enable) {
     buzzerState = false;
     past_time = current_time;
+    lastInterval = 0;
     digitalWrite(buzzerPin, LOW);
     return;
+  }
+
+  // Reset timing if interval changes
+  if (pulseInterval != lastInterval) {
+    past_time = current_time;
+    lastInterval = pulseInterval;
   }
 
   if (current_time - past_time >= pulseInterval) {
@@ -102,8 +110,9 @@ void loop() {
 
   /* ---------- HX711 LOGIC ---------- */
 
-  long raw = scale.read_average(5);
-  float w = scale.get_units(5);
+  // FIX: use single reading to reduce blocking time
+  long raw = scale.read();          
+  float w = scale.get_units(1);     
 
   filtered = 0.3 * filtered + 0.7 * w;
   float absF = abs(filtered);
@@ -167,7 +176,6 @@ void loop() {
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
 
-  pinMode(echoPin, INPUT);
   duration = pulseIn(echoPin, HIGH);
 
   cm = (duration / 2) / 29.1;
@@ -191,5 +199,6 @@ void loop() {
     buzzer_pulsate(buzzerPin, 250, false);
   }
 
-  delay(50);
+  // FIX: faster loop to allow short pulse intervals
+  delay(10);
 }
