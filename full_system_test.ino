@@ -41,8 +41,8 @@ const int MEDIUM_DIST = 30;
 const int FURTHEST_DIST = 50;
 
 const int CLOSEST_FREQ = 60;
-const int MEDIUM_FREQ  = 120;
-const int FURTHEST_FREQ = 250;
+const int MEDIUM_FREQ  = 200;
+const int FURTHEST_FREQ = 400;
 
 
 // Non-blocking buzzer pulse function
@@ -74,6 +74,14 @@ void buzzer_pulsate(int buzzerPin, unsigned long pulseInterval, bool enable)
     digitalWrite(buzzerPin, buzzerState);
   }
 }
+
+
+/* =======================
+   LIGHT SENSOR
+   ======================= */
+
+#define DO_PIN 13
+const int ledPin = 6;  // LED for light sensor
 
 
 /* =======================
@@ -201,4 +209,14 @@ void loop() {
 
   // FIX: faster loop to allow short pulse intervals
   delay(10);
+
+
+  /* ---------- LIGHT SENSOR LOGIC ---------- */
+  int lightState = digitalRead(DO_PIN);
+
+  if (lightState == HIGH) {
+    digitalWrite(ledPin, HIGH);
+  } else {
+    digitalWrite(ledPin, LOW);
+  }
 }
