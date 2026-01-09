@@ -1,3 +1,6 @@
+//This script is for ESP32. For Arduino UNO, change pins and OVERIDE_BUTTON_THRESH to 50
+
+
 #include "HX711.h"
 
 #define DOUT 26
